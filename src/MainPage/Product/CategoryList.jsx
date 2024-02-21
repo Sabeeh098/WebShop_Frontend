@@ -1,6 +1,6 @@
 /* eslint-disable no-dupe-keys */
 /* eslint-disable no-unused-vars */
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import Table from "../../EntryFile/datatable";
 import { Link } from "react-router-dom";
 import Tabletop from "../../EntryFile/tabletop";
@@ -25,6 +25,7 @@ import {
 import Select2 from "react-select2-wrapper";
 import "react-select2-wrapper/css/select2.css";
 import Swal from "sweetalert2";
+import { adminAxiosInstance } from "../../api/axios";
 
 const options = [
   { id: 1, text: "Choose Category", text: "Choose Category" },
@@ -62,6 +63,20 @@ const confirmText = () => {
 };
 const CategoryList = () => {
   const [inputfilter, setInputfilter] = useState(false);
+
+  const [category,setCategory]=useState("")
+
+  async function getCategory(){
+    const res =await adminAxiosInstance.get('/product/getCategory');
+    console.log(res.data.data)
+    setCategory(res.data.data)
+   
+  }
+  useEffect(()=>{
+    getCategory()
+  },[])
+  
+  
 
   const togglefilter = (value) => {
     setInputfilter(value);

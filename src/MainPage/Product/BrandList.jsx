@@ -1,5 +1,5 @@
 /* eslint-disable no-unused-vars */
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import Table from "../../EntryFile/datatable";
 import { Link } from "react-router-dom";
 import Tabletop from "../../EntryFile/tabletop";
@@ -24,9 +24,23 @@ import {
   DeleteIcon,
 } from "../../EntryFile/imagePath";
 import Swal from "sweetalert2";
+import { adminAxiosInstance } from "../../api/axios";
 
 const BrandList = () => {
   const [inputfilter, setInputfilter] = useState(false);
+   
+  const [brands,setBrands]=useState("")
+
+  async function getBrands(){
+    const res =await adminAxiosInstance.get('/product/getbrands');
+    console.log(res.data.data)
+    setBrands(res.data.data)
+   
+  }
+  useEffect(()=>{
+    getBrands()
+  },[])
+
   const togglefilter = (value) => {
     setInputfilter(value);
   };

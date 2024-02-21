@@ -1,6 +1,6 @@
 /* eslint-disable no-dupe-keys */
 /* eslint-disable no-unused-vars */
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import Table from "../../EntryFile/datatable";
 import { Link } from "react-router-dom";
 import Tabletop from "../../EntryFile/tabletop"
@@ -28,8 +28,24 @@ import {
 } from "../../EntryFile/imagePath";
 import Select2 from "react-select2-wrapper";
 import "react-select2-wrapper/css/select2.css";
+import { adminAxiosInstance } from "../../api/axios";
 
 const SubCategoryList = () => {
+  const [subCategory,setSubcategory]=useState([])
+
+  async function getsubCategory() {
+    try {
+        const res = await adminAxiosInstance.get('/product/getsubcategory');
+        setSubcategory(res.data.data);
+        console.log(res.data.data)
+    } catch(err) {
+        console.log(err);
+    }
+}
+  useEffect(()=>{
+    getsubCategory()
+  },[])
+
   const options2 = [
     { id: 1, text: "Choose Category", text: "Choose Category" },
     { id: 2, text: "Computers", text: "Computers" },

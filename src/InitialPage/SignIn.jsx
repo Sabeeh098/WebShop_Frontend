@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Link } from 'react-router-dom';
+import { Link ,useHistory} from 'react-router-dom';
 import { Helmet } from 'react-helmet';
 import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
@@ -11,10 +11,11 @@ import PropTypes from 'prop-types';
 import { adminAxiosInstance } from '../api/axios';
 import { adminLogin } from '../store/slice/adminSlice';
 
-const SignInPage = ({ props }) => {
+const SignInPage = () => {
     const [eye, setEye] = useState(true);
     const [error, setError] = useState('');
     const dispatch = useDispatch(); 
+    const history=useHistory();
 
     const validationSchema = Yup.object().shape({
         email: Yup.string()
@@ -41,6 +42,7 @@ const SignInPage = ({ props }) => {
     const onSubmit = async (data) => {
         try {
             const res = await adminAxiosInstance.post('/login', data);
+            console.log("response",res.data)
             const { token, name, role, id } = res.data;
 
             // Dispatch the adminLogin action with user data
@@ -50,7 +52,8 @@ const SignInPage = ({ props }) => {
             localStorage.setItem('token', token);
 
             // Redirect to dashboard or any other page upon successful login
-            props.history.push('/dream-pos/dashboard');
+          
+            history.push('/dream-pos/dashboard');
         } catch (err) {
             console.log(err);
             setError(err.response.data); // Set error message received from backend

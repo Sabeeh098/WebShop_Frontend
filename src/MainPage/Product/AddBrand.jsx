@@ -1,7 +1,30 @@
-import React from 'react';
+import React, {  useState } from 'react';
 import { Upload } from '../../EntryFile/imagePath';
+import { adminAxiosInstance } from '../../api/axios';
 
 const AddBrand = () => {
+    const [brands_name,setBrand_name]=useState("")
+    // const [product_Image,setProduct_Image]=useState("")
+    const [description,setDescription]=useState("")
+
+
+    
+    const onSubmit = async () => {
+
+        let brandObj={
+            brands_name,
+            // product_Image,
+            description
+        }
+        try {
+            const res = await adminAxiosInstance.post('/product/addbrands', brandObj);
+            console.log(res)
+        } catch (err) {
+            console.log(err);
+            // setError(err.response.data); 
+        }
+    };
+
     return (
         <>
             <div className="page-wrapper">
@@ -19,13 +42,13 @@ const AddBrand = () => {
                                 <div className="col-lg-3 col-sm-6 col-12">
                                     <div className="form-group">
                                         <label>Brand Name</label>
-                                        <input type="text" />
+                                        <input type="text" value={brands_name} onChange={(e)=>setBrand_name(e.target.value)}/>
                                     </div>
                                 </div>
                                 <div className="col-lg-12">
                                     <div className="form-group">
                                         <label>Description</label>
-                                        <textarea className="form-control" defaultValue={""} />
+                                        <textarea className="form-control" defaultValue={""} value={description} onChange={(e)=>setDescription(e.target.value)}/>
                                     </div>
                                 </div>
                                 <div className="col-lg-12">
@@ -41,7 +64,7 @@ const AddBrand = () => {
                                     </div>
                                 </div>
                                 <div className="col-lg-12">
-                                    <button  className="btn btn-submit me-2">
+                                    <button  className="btn btn-submit me-2" onClick={onSubmit}>
                                         Submit
                                     </button>
                                     <button className="btn btn-cancel">

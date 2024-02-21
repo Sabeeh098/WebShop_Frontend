@@ -1,9 +1,10 @@
 /* eslint-disable no-unused-vars */
 /* eslint-disable no-dupe-keys */
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { Upload } from '../../EntryFile/imagePath';
 import Select2 from 'react-select2-wrapper';
 import 'react-select2-wrapper/css/select2.css';
+import { adminAxiosInstance } from '../../api/axios';
 
 
 const options = [
@@ -37,6 +38,73 @@ const options6 = [
 ]
 
 const AddProduct = () => {
+    const [category,setCategory]=useState([])
+    const [brands,setBrands]=useState([])
+    const [subcategory,setSubcategory]=useState([])
+
+    async function getCategory() {
+      try {
+          const res = await adminAxiosInstance.get('/product/getCategory');
+          if(res){
+            const formattedCategories = res.data.data.map(cat => ({
+              id: cat.category_name,
+              text: cat.category_name,
+              text:cat.category_name
+        // Adjust according to your actual API response
+          }));
+          setCategory(formattedCategories);
+          console.log(res.data.data)
+          }
+          
+      } catch (err) {
+          console.log(err);
+      }
+  }
+  
+
+
+    async function getBrands() {
+      try {
+          const res = await adminAxiosInstance.get('/product/getbrands');
+          if(res){
+            const formattedCategories = res.data.data.map(cat => ({
+              id: cat.brands_name,
+              text: cat.brands_name,
+              text:cat.brands_name
+        // Adjust according to your actual API response
+          }));
+          setBrands(formattedCategories);
+          console.log(res.data.data)
+          }
+          
+      } catch (err) {
+          console.log(err);
+      }
+  }
+ 
+    async function getsubCategory() {
+      try {
+          const res = await adminAxiosInstance.get('/product/getsubcategory');
+          if(res){
+            const formattedCategories = res.data.data.map(cat => ({
+              id: cat.category_name,
+              text: cat.category_name,
+              text:cat.category_name
+        // Adjust according to your actual API response
+          }));
+          setSubcategory(formattedCategories);
+          console.log(res.data.data)
+          }
+          
+      } catch (err) {
+          console.log(err);
+      }
+  }
+  useEffect(()=>{
+    getCategory()
+    getBrands()
+    getsubCategory()
+  },[])
 
     return (
         <>
@@ -63,7 +131,7 @@ const AddProduct = () => {
                                         <label>Category</label>
                                         <Select2
                               className="select"
-                              data={options}
+                              data={category}
                               options={{
                                 placeholder: 'Choose Category',
                               }} />
@@ -75,7 +143,7 @@ const AddProduct = () => {
                                         <label>Sub Category</label>
                                         <Select2
                               className="select"
-                              data={options1}
+                              data={subcategory}
                               options={{
                                 placeholder: 'Choose Sub Category',
                               }} />
@@ -86,7 +154,7 @@ const AddProduct = () => {
                                         <label>Brand</label>
                                         <Select2
                               className="select"
-                              data={options2}
+                              data={brands}
                               options={{
                                 placeholder: 'Choose Brand',
                               }} />
